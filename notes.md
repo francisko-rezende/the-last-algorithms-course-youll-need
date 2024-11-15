@@ -271,3 +271,77 @@ export default function bubble_sort(arr: number[]): void {
   - deletion in the middle not so much, the transversal might be costly
   - insertions in the head/tail (prepend/append) can be fast because of the references
   - insertions in the middle might be costly because of the transversal
+- Linked lists are useful when we need to do a bunch of operations at the head or tail of the structure (eg, we need to constantly remove the oldest item which might be the tail)
+- linked lists are the most fundamental units of other data structures like graphs
+
+### Queue
+
+- is this an algo or a ds? it uses the ds and performs the algo on top of the ds (thinking of linked lists, insertion would be the algo which is performed on top of the linked list, which is the ds)
+- a **queue** is a specific implementation of a linked list
+- in a queue we add new items to the tail
+  - add new item
+  - change tail.next reference to new item
+  - change tail reference to new item
+- pops happen from the head
+  - change head reference to head.next
+  - point head.next to null
+  - return head.value
+- performance implications:
+  - there's no transverse
+  - pushing and popping are constant time operations 
+- FIFO: first in first out
+- constraints are used to limit operations and make things fast while doing so
+
+```ts
+type Node<T> = {
+    value: T;
+    next?: Node<T>;
+};
+
+export default class Queue<T> {
+    public length: number;
+    private head?: Node<T>;
+    private tail?: Node<T>;
+
+    constructor() {
+        this.head = this.tail = undefined;
+        this.length = 0;
+    }
+
+    enqueue(item: T): void {
+        const node = { value: item } as Node<T>;
+        this.length++;
+
+        if (!this.tail) {
+            // create item in empty array sort of
+            this.tail = this.head = node;
+            return;
+        }
+
+        this.tail.next = node;
+        this.tail = node;
+        // console.log(this.head);
+    }
+
+    deque(): T | undefined {
+        if (this.length === 0 || !this.head) {
+            return undefined;
+        }
+
+        this.length--;
+        const head = this.head;
+        this.head = this.head.next;
+
+        head.next = undefined;
+
+        if (!this.head) {
+            this.tail = undefined;
+        }
+
+        return head.value;
+    }
+    peek(): T | undefined {
+        return this?.head?.value;
+    }
+}
+```
