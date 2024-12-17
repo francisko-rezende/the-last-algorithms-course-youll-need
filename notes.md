@@ -323,7 +323,7 @@ export default class Queue<T> {
         // console.log(this.head);
     }
 
-    deque(): T | undefined {
+    dequeue(): T | undefined {
         if (this.length === 0 || !this.head) {
             return undefined;
         }
@@ -344,4 +344,58 @@ export default class Queue<T> {
         return this?.head?.value;
     }
 }
+```
+
+### Stack
+
+- A stack is like a queue but backwards
+![common big o cases](images/queue.png)
+- you can only add and remove items from the queue's head
+- to add something, you remove the pointer to the old head, point it to the new head and point the previous prop of the new head to the old head
+- to remove something, save the old head, get the head to point to the previous (or next) element and then return the old head
+- helpful mental model for recursion (the functions being called recursively use a stack)
+- implementation:
+
+```ts
+
+type Node<T> = {
+    value: T;
+    prev?: Node<T>;
+};
+export default class Stack<T> {
+    public length: number;
+    private head?: Node<T>;
+
+    constructor() {
+        this.head = undefined;
+        this.length = 0;
+    }
+
+    push(item: T): void {
+        const node: Node<T> = { value: item };
+        this.length++;
+        if (!this.head) {
+            this.head = node;
+            return;
+        }
+
+        node.prev = this.head;
+        this.head = node;
+    }
+    pop(): T | undefined {
+        this.length = Math.max(this.length - 1, 0);
+        if (this.length === 0) {
+            const head = this.head;
+            this.head = undefined;
+            return head?.value;
+        }
+        const head = this.head as Node<T>;
+        this.head = this.head?.prev;
+        return head.value;
+    }
+    peek(): T | undefined {
+        return this.head?.value;
+    }
+}
+
 ```
