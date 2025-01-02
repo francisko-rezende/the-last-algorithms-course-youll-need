@@ -399,3 +399,45 @@ export default class Stack<T> {
 }
 
 ```
+
+## Arrays
+
+### Arrays vs Linked List
+
+- arrays are nice to access values (n(1));
+- you can't insert/remove items without writing the for loops to shift/unshift all the other items
+- you have to allocate the space for the array upfront while linked lists only use the memory they use
+- usability differs: to find a specific item you need to walk a linked list (o(n))
+
+### ArrayList
+
+- can we have array access with the ability to grow?
+- yes, with an array list
+- it is a ds that uses an array as its base and then we build on this with custom add/remove features
+- the structure has a length and a capacity
+- to get the value from a specific index `get(index)`:
+  - check if index is within length, return the element from it, if not return `undefined`
+- push(val): 
+  - is len with capacity? if so, add an element at len and increase len by one
+  - O(1)
+  - if len === capacity, create new array, move current elements to it, add new element and add 1 to len
+- pop
+  - is len > 0? return element from len -1 index, otherwise return `undefined`
+- enqueue
+  - to add something to the front of the array list, you gotta move over all elements to create the room at the front for the new element
+  - not super performant (O(n))
+- dequeue
+  - similar to enqueue, gotta move over all elements (O(n))
+  - this is also true for middle of list deletions
+- "which one is better? linked list or array list?" it depends on the situation
+  - array lists are great for random access but not so great for remove from the front because you need to shift everything
+- TODO: fill up array list implementation
+
+### Ring Buffers
+
+- array like storage
+- instead of 0 as head and len as tail, can have index based head and tail
+- to remove from the front, add one to the head (o(1))
+- same to remove from the tail, subtract one from the tail (o(1))
+- there's only relocation when the tial exceeds the head
+TODO: review how it circles around using the module operator
