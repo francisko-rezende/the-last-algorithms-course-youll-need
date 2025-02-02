@@ -441,3 +441,66 @@ export default class Stack<T> {
 - same to remove from the tail, subtract one from the tail (o(1))
 - there's only relocation when the tial exceeds the head
 TODO: review how it circles around using the module operator
+
+### What's the [] in JS?
+
+- unshift = adding to a list
+- when load testing, it's cool to have values like `[10, 100, 1000, 10_000, 100_000]` so there's a nice variation in the quantities
+- according to tests:
+  - get: o(n)
+  - push/pop: o(n)
+  - unshift o(n)
+- this suggests it's an array list
+- TODO: return here and explain in more details why this is so (also discussed in the q&a video)
+
+## Recursion
+
+### Recursion
+
+- Def: a function that calls itself until it hits a base case that does something
+- The simplest example:
+
+```ts
+function foo(n: number): number {
+    // base case
+    if (n === 1) {
+        return 1;
+    }
+
+// the function calling itself = recursing(??)
+    return n + foo(n - 1)
+}
+```
+
+- base case is super important: think about it and try to make it as simple and clear as possible, this really helps!
+- some important bits about calling functions:
+  - rA = return address
+  - rV = return value
+  - A = Argument
+- Now if we were to call `foo(5)` we'd have something like this:
+![common big o cases](images/recursion.png)
+- In this call, we start with an unknown return address, a return value of 5 + ? (because we don't know what it is yet) and the argument is 5
+- it then calls `foo(4)` which has the call `foo(5)` as the return address, 4 + ? as the return value and 4 as the argument
+- this goes on and on until we reach the base case, which is when we figure out the first ? in the return value and then move up in the stack actually making the calculations and eventually delivering the sum (in this case) to the mysterious return address
+- In general, **recursion can be broken down in 3 steps** (important to paving?)
+    1. pre: something that happens before the recursion, which is the n+ (5 + ?, 4 + ? and so on)
+    2. recurse: the actual recursion
+    3. post: something else after recursing. In our case it was returning but it could be anything like logging something for example
+- repeating for emphasis: 2 important steps:
+  - solid base case
+  - then recurse
+
+### Path finding: base case
+
+- maze solver: 
+  - these are walls: #
+  - there's a start `s` and an end `e`
+  - at any given point you can move to one of the four directions (up, right, down, left) as long as there are no walls
+  - we should also try avoiding places we've been before so we don't end up running in circles
+  - base case(s):
+    1. it's a wall
+    2. off the map (gotta go back to the map)
+    3. it's the end (my only friend)
+    4. if we have seen it (been on the tile previously)
+  - recursive cases: check all directions
+  - "seems like the initial function never is the one you want to recurse lol"
